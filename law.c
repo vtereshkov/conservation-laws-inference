@@ -343,8 +343,6 @@ static void printBest(uint64_t *population, int popSize, StatePolar *sp, int siz
 
 int main()
 {
-    srand(1987);
-
     // Prepare simulated data
     const int size = 100000;
     const double dt = 0.001;
