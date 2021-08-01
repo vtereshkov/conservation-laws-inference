@@ -5,7 +5,7 @@
 #include <math.h>
 #include <assert.h>
 
-//#define REQUIRE_VELOCITY_DEPENDENCE
+#define REQUIRE_VELOCITY_DEPENDENCE
 
 
 // Utilities
