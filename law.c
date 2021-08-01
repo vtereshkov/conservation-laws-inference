@@ -168,7 +168,7 @@ static bool valid(uint64_t func)
 }
 
 
-static uint64_t random(void)
+static uint64_t getRandom(void)
 {
     uint64_t res = 0;
     for (int i = 0; i < 64; i += 15)
@@ -177,11 +177,11 @@ static uint64_t random(void)
 }
 
 
-static uint64_t randomValid(void)
+static uint64_t getRandomValid(void)
 {
     while (1)
     {
-        uint64_t func = random();
+        uint64_t func = getRandom();
         if (valid(func))
             return func;
     }
@@ -201,7 +201,7 @@ static uint64_t mutateValid(uint64_t func)
     func = mutate(func);
     if (valid(func))
         return func;
-    return random();
+    return getRandom();
 }
 
 
@@ -345,7 +345,7 @@ int main()
     uint64_t population[popSize];
 
     for (int i = 0; i < popSize; i++)
-        population[i] = randomValid();
+        population[i] = getRandomValid();
 
     const double threshold = 5;
     printf("Best of initial population:\n");
@@ -363,7 +363,7 @@ int main()
 
             if (isnan(curScore) || !gradValid(curGradRMS) || curScore < 0)
             {
-                population[i] = randomValid();
+                population[i] = getRandomValid();
                 continue;
             }
 
