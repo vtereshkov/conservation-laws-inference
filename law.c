@@ -5,7 +5,19 @@
 #include <math.h>
 #include <assert.h>
 
-#define REQUIRE_VELOCITY_DEPENDENCE
+//#define REQUIRE_VELOCITY_DEPENDENCE
+
+
+// Utilities
+
+const static int customRandMax = 32767;
+
+int customRand()
+{
+  static unsigned long seed = 1;
+  seed = seed * 1103515245 + 12345;
+  return (unsigned int)(seed / 65536) % 32768;
+}
 
 
 static double wrap(double phi)
@@ -172,7 +184,7 @@ static uint64_t getRandom(void)
 {
     uint64_t res = 0;
     for (int i = 0; i < 64; i += 15)
-        res = (res << 15) | rand();
+        res = (res << 15) | customRand();
     return res;
 }
 
@@ -190,8 +202,8 @@ static uint64_t getRandomValid(void)
 
 static uint64_t mutate(uint64_t func)
 {
-    const unsigned char pos = rand() & 15;
-    const unsigned char instr = rand() & 15;
+    const unsigned char pos = customRand() & 15;
+    const unsigned char instr = customRand() & 15;
     return (func & ~(15 << (4 * pos))) | (instr << (4 * pos));
 }
 
@@ -258,7 +270,7 @@ static void simulate(StatePolar *sp, int size, double dt)
 
 static double score(uint64_t func, StatePolar *sp, int size, double dt, double *gradRMS)
 {
-    const int decim = 100;
+    const int decim = 1000;
 
     double conservedPrev = 0;
     double sumResSq = 0;
@@ -378,7 +390,7 @@ int main()
             const double temperature = 0.2;
             const double prob = (mutScore > curScore) ? 1.0 : (exp((mutScore - curScore) / temperature));
 
-            if (rand() < prob * RAND_MAX)
+            if (customRand() < prob * customRandMax)
                 population[i] = mutated;
         }
     }
